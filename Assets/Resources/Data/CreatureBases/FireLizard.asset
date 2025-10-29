@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cec5b8a15336844ae54a61fd36aedb, type: 3}
+  m_Name: FireLizard
+  m_EditorClassIdentifier: 
+  creatureName: Fire Lizard
+  frontSprite: {fileID: -3402451715102035049, guid: 8b2db272b98604b4f931dce8bc68d8c7, type: 3}
+  backSprite: {fileID: -6361271296530862326, guid: 8b2db272b98604b4f931dce8bc68d8c7, type: 3}
+  maxHP: 100
+  atk: 2
+  def: 3
+  spd: 1
+  learnableMoves:
+  - {fileID: 11400000, guid: 1e6df50b927b94c418475b8a3157b7d8, type: 2}
+  battlePrefab: {fileID: 2831885145790271382, guid: f74a95208378aa242b2b38fa6a5dbd2d, type: 3}
