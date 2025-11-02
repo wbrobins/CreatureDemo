@@ -60,7 +60,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator SetupBattle()
     {
         playerUnit.Setup(partyList[0]);
-        enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, -1, null));
+        enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, -1, 0, null));
 
         playerHUD.SetData(playerUnit.Creature);
         enemyHUD.SetData(enemyUnit.Creature);
@@ -130,7 +130,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
             
-            Creature clone = new Creature(c.CreatureId, c.Level, c.HP, moves);
+            Creature clone = new Creature(c.CreatureId, c.Level, c.HP, c.Experience, moves);
             partyList.Add(clone);
         }
     }
@@ -163,6 +163,7 @@ public class BattleSystem : MonoBehaviour
         
         if(enemyUnit.Creature.HP == 0)
         {
+            playerUnit.Creature.GetExperience(enemyUnit.Creature.Experience / 7);
             Debug.Log("Player wins!");
             bool playerWon = true;
             OnBattleOver?.Invoke(playerWon);

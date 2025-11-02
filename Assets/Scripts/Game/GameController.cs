@@ -168,7 +168,7 @@ public class GameController : MonoBehaviour
             }
 
             //rebuild the Creature
-            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, moves);
+            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, c.Experience, moves);
 
             //add to player's party
             partyList.Add(creature);
@@ -205,7 +205,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, moves);
+            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, c.Experience, moves);
 
             partyList.Add(creature);
         }

@@ -16,6 +16,7 @@ public class CreatureData
     public string CreatureId;
     public int Level;
     public int HP;
+    public int Experience;
     public List<MoveData> Moves;
 }
 
