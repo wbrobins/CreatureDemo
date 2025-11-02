@@ -106,6 +106,7 @@ public class GameController : MonoBehaviour
             CreatureData cData = new CreatureData();
             cData.CreatureId = creature.Base.name;
             cData.Level = creature.Level;
+            cData.HP = creature.HP;
             cData.Moves = new List<MoveData>();
 
             foreach (var move in creature.Moves)
@@ -167,7 +168,7 @@ public class GameController : MonoBehaviour
             }
 
             //rebuild the Creature
-            Creature creature = new Creature(c.CreatureId, c.Level, moves);
+            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, moves);
 
             //add to player's party
             partyList.Add(creature);
