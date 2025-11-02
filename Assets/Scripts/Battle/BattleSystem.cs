@@ -60,7 +60,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator SetupBattle()
     {
         playerUnit.Setup(partyList[0]);
-        enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, null));
+        enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, -1, null));
 
         playerHUD.SetData(playerUnit.Creature);
         enemyHUD.SetData(enemyUnit.Creature);
@@ -130,7 +130,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
             
-            Creature clone = new Creature(c.CreatureId, c.Level, moves);
+            Creature clone = new Creature(c.CreatureId, c.Level, c.HP, moves);
             partyList.Add(clone);
         }
     }
@@ -142,7 +142,7 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.PlayerAction && move.PP > 0)
         {
             Debug.Log("Move executed: " + move.Base.moveName);
-            StartCoroutine(PlayerMove());
+            StartCoroutine(PlayerMove(move.Base.power));
         }
         else
         {
@@ -150,19 +150,50 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    IEnumerator PlayerMove()
+    IEnumerator PlayerMove(int power)
     {
         state = BattleState.PlayerMove;
+        Debug.Log(state);
+
+        enemyUnit.Creature.TakeDamage((playerUnit.Creature.Attack * power)/2); //damage enemy
+        Debug.Log("Player attacked for: " + (playerUnit.Creature.Attack * power)/2);
+        enemyHUD.SetData(enemyUnit.Creature);  //update enemy HUD
+
         yield return new WaitForSeconds(2);
-        StartCoroutine(EnemyMove());
+        
+        if(enemyUnit.Creature.HP == 0)
+        {
+            Debug.Log("Player wins!");
+            bool playerWon = true;
+            OnBattleOver?.Invoke(playerWon);
+        }
+        else
+        {
+            StartCoroutine(EnemyMove());
+        }
     }
 
     IEnumerator EnemyMove()
     {
         state = BattleState.EnemyMove;
-        Debug.Log("Enemy uses: " + enemyUnit.Creature.GetRandomMove().Base.moveName);
+        Debug.Log(state);
+        Move move = enemyUnit.Creature.GetRandomMove(); //get random move from enemy move pool
+
+        playerUnit.Creature.TakeDamage((enemyUnit.Creature.Attack * move.Base.power) / 2); //damage player
+        Debug.Log("Enemy uses: " + move.Base.moveName);
+        playerHUD.SetData(playerUnit.Creature);   //update player HUD
+
         yield return new WaitForSeconds(2);
+
+        if(playerUnit.Creature.HP == 0)
+        {
+            Debug.Log("Player loses!");
+            bool playerWon = false;
+            OnBattleOver?.Invoke(playerWon);
+        }
+
         state = BattleState.PlayerAction;
+        Debug.Log(state);
         Debug.Log("Player turn!");
     }
 }

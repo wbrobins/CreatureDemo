@@ -12,9 +12,10 @@ public class MoveData
 [Serializable]
 public class CreatureData
 {
-    //TODO: ADD HP
+    //TODO: ADD EXPERIENCE
     public string CreatureId;
     public int Level;
+    public int HP;
     public List<MoveData> Moves;
 }
 

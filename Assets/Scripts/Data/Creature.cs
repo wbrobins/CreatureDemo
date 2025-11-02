@@ -24,7 +24,7 @@ public class Creature
     public bool IsFainted => hp <= 0;
 
     // Constructor for runtime initialization
-    public Creature(string id, int pLevel, List<Move> learnedMoves = null)
+    public Creature(string id, int pLevel, int pHp = -1,  List<Move> learnedMoves = null)
     {
         creature_id = id;
         creatureBase = Resources.Load<CreatureBase>($"Data/CreatureBases/" + id);
@@ -32,7 +32,16 @@ public class Creature
         level = pLevel;
 
         maxHP = CalculateMaxHP();
-        hp = maxHP;
+        
+        if(pHp == -1)
+        {
+          hp = maxHP;  
+        }
+        else
+        {
+            hp = pHp;
+        }
+        
 
         if (learnedMoves != null)
         {

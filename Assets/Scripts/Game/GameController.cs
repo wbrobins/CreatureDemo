@@ -139,19 +139,18 @@ public class GameController : MonoBehaviour
         string json = File.ReadAllText(path);
         PlayerData loadedData = JsonUtility.FromJson<PlayerData>(json);
 
-        // Clear the current party (optional)
         partyList.Clear();
 
         foreach (var c in loadedData.partyList)
         {
-            // Rebuild the move list for this creature
+            //rebuild the move list for creature
             List<Move> moves = new List<Move>();
 
             if (c.Moves != null)
             {
                 foreach (var m in c.Moves)
                 {
-                    // Load the MoveBase asset by name
+                    //load the MoveBase asset by name
                     MoveBase moveBase = Resources.Load<MoveBase>("Data/MoveBases/" + m.MoveId);
 
                     if (moveBase == null)
@@ -160,17 +159,17 @@ public class GameController : MonoBehaviour
                         continue;
                     }
 
-                    // Rebuild the Move instance
+                    //rebuild the Move instance
                     Move move = new Move(m.MoveId);
                     move.SetPP(m.CurrentPP);
                     moves.Add(move);
                 }
             }
 
-            // Now rebuild the Creature
+            //rebuild the Creature
             Creature creature = new Creature(c.CreatureId, c.Level, moves);
 
-            // Add to the player's party
+            //add to player's party
             partyList.Add(creature);
 
             Debug.Log($"Loaded creature: {c.CreatureId} (Level {c.Level})");
@@ -205,7 +204,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            Creature creature = new Creature(c.CreatureId, c.Level, moves);
+            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, moves);
 
             partyList.Add(creature);
         }
