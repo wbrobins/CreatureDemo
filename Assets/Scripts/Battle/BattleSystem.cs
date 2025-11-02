@@ -163,10 +163,9 @@ public class BattleSystem : MonoBehaviour
         
         if(enemyUnit.Creature.HP == 0)
         {
-            playerUnit.Creature.GetExperience(enemyUnit.Creature.Experience / 7);
-            Debug.Log("Player wins!");
             bool playerWon = true;
-            OnBattleOver?.Invoke(playerWon);
+            Debug.Log("Player wins!");
+            StartCoroutine(EndBattle(playerWon));
         }
         else
         {
@@ -186,15 +185,29 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        if(playerUnit.Creature.HP == 0)
+        if (playerUnit.Creature.HP == 0)
         {
             Debug.Log("Player loses!");
             bool playerWon = false;
-            OnBattleOver?.Invoke(playerWon);
+            StartCoroutine(EndBattle(playerWon));
+        }
+        else
+        {
+            state = BattleState.PlayerAction;
+            Debug.Log(state);
+            Debug.Log("Player turn!");
+        }
+    }
+    
+    IEnumerator EndBattle(bool playerWon)
+    {
+        if (playerWon)
+        {
+            playerUnit.Creature.GetExperience(enemyUnit.Creature.Experience / 7);
         }
 
-        state = BattleState.PlayerAction;
-        Debug.Log(state);
-        Debug.Log("Player turn!");
+        yield return new WaitForSeconds(2);
+
+        OnBattleOver?.Invoke(playerWon);
     }
 }
