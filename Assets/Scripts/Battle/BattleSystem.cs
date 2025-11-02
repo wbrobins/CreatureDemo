@@ -212,9 +212,14 @@ public class BattleSystem : MonoBehaviour
 
         if (playerWon)
         {
+            int prevLevel = playerUnit.Creature.Level;
             dBox.AddToQueue("System", "You have won!");
             playerUnit.Creature.GetExperience(enemyUnit.Creature.Experience / 7);
             dBox.AddToQueue("System", playerUnit.Creature.Base.Name + " has gained " + (enemyUnit.Creature.Experience / 7) + " exp!");
+            if(playerUnit.Creature.Level > prevLevel)
+            {
+                dBox.AddToQueue("System", playerUnit.Creature.Base.Name + " has leveled up from " + prevLevel + " to " + playerUnit.Creature.Level + "!");
+            }
         }
         else
         {
