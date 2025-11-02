@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
     [SerializeField] BattleSystem battleSystem;
+    [SerializeField] public DialogueBox dialogueBox;
     [SerializeField] PlayerController playerController;
     [SerializeField] Vector3 playerPos;
     [SerializeField] public List<Creature> partyList;

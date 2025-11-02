@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 
 public enum BattleState { Start, PlayerAction, PlayerMove, EnemyMove, Busy }
@@ -24,6 +25,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] Transform movesPanel;
 
     private GameController gameController;
+    private bool winOrLoss;
 
     public event Action<bool> OnBattleOver;
 
@@ -39,6 +41,8 @@ public class BattleSystem : MonoBehaviour
         playerHUD = GameObject.Find("PlayerUnitHUD").GetComponent<BattleHUD>();
         enemyHUD = GameObject.Find("EnemyUnitHUD").GetComponent<BattleHUD>();
         partyHUD = GameObject.Find("PartyList").GetComponent<PartyHUD>();
+
+        gameController.dialogueBox.dialogueEmpty.AddListener(OnEndOfBattleDialogueEmpty);
 
         //clone party list passed from game controller 
         partyList = new List<Creature>();
@@ -165,7 +169,7 @@ public class BattleSystem : MonoBehaviour
         {
             bool playerWon = true;
             Debug.Log("Player wins!");
-            StartCoroutine(EndBattle(playerWon));
+            EndBattle(playerWon);
         }
         else
         {
@@ -189,7 +193,7 @@ public class BattleSystem : MonoBehaviour
         {
             Debug.Log("Player loses!");
             bool playerWon = false;
-            StartCoroutine(EndBattle(playerWon));
+            EndBattle(playerWon);
         }
         else
         {
@@ -198,16 +202,30 @@ public class BattleSystem : MonoBehaviour
             Debug.Log("Player turn!");
         }
     }
-    
-    IEnumerator EndBattle(bool playerWon)
+
+    void EndBattle(bool playerWon)
     {
+        state = BattleState.Busy;
+
+        winOrLoss = playerWon;
+        DialogueBox dBox = gameController.dialogueBox;
+
         if (playerWon)
         {
+            dBox.AddToQueue("System", "You have won!");
             playerUnit.Creature.GetExperience(enemyUnit.Creature.Experience / 7);
+            dBox.AddToQueue("System", playerUnit.Creature.Base.Name + " has gained " + (enemyUnit.Creature.Experience / 7) + " exp!");
+        }
+        else
+        {
+            dBox.AddToQueue("System", "You have lost...");
         }
 
-        yield return new WaitForSeconds(2);
-
-        OnBattleOver?.Invoke(playerWon);
+        dBox.PlayNextInQueue();
+    }
+    
+    void OnEndOfBattleDialogueEmpty()
+    {
+        OnBattleOver?.Invoke(winOrLoss);
     }
 }
