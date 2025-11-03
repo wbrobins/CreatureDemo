@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public enum GameState { FreeRoam, Battle, Dialog }
@@ -43,9 +46,9 @@ public class GameController : MonoBehaviour
         else if (state == GameState.Battle && battleSystem != null)
             battleSystem.HandleUpdate();
         
-        if (Input.GetKeyDown(KeyCode.P))
+        if (state == GameState.FreeRoam && Input.GetKeyDown(KeyCode.F))
         {
-            SaveGame();
+            StartCoroutine(SaveRoutine(dialogueBox.dialogueEmpty));
         }
     }
 
@@ -180,7 +183,7 @@ public class GameController : MonoBehaviour
         Debug.Log("Game loaded. Player Name: " + loadedData.playerName);
         Debug.Log("Party List Count: " + partyList.Count);
     }
-    
+
     void SavePartyFromWonBattle() //stupid function name
     {
         partyList.Clear(); //clear list 
@@ -210,5 +213,38 @@ public class GameController : MonoBehaviour
 
             partyList.Add(creature);
         }
+    }
+    
+    IEnumerator SaveRoutine(UnityEvent unityEvent)
+    {
+        state = GameState.Dialog;
+
+        var trigger = false;
+        Action action = () => trigger = true;
+        unityEvent.AddListener(action.Invoke);
+
+        dialogueBox.AddToQueue("System", "Would you like to save your game?");
+        dialogueBox.SetChoiceButtons("Yes", "No");
+        dialogueBox.PlayNextInQueue();
+
+        yield return new WaitUntil(() => trigger);
+
+        if (dialogueBox.choice)
+        {
+            var trigger2 = false;
+            Action action2 = () => trigger2 = true;
+            unityEvent.AddListener(action2.Invoke);
+
+            dialogueBox.AddToQueue("System", "Game saved!");
+            SaveGame();
+            dialogueBox.PlayNextInQueue();
+
+            yield return new WaitUntil(() => trigger2);
+
+            unityEvent.RemoveListener(action2.Invoke);
+        }
+
+        unityEvent.RemoveListener(action.Invoke);
+        state = GameState.FreeRoam;
     }
 }
