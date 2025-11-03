@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - DialogUI
   - 
   - 
   - 
@@ -41,3 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BattleUI
+    uniqueID: 2006477929
+    locked: 0
+  - name: DialogUI
+    uniqueID: 2450934013
+    locked: 0
+  m_RenderingLayers:
+  - Default
