@@ -159,6 +159,9 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PlayerMove;
         Debug.Log(state);
 
+        playerUnit.PlayAttackAnimation();
+        enemyUnit.PlayHitAnimation();
+
         enemyUnit.Creature.TakeDamage((playerUnit.Creature.Attack * power)/2); //damage enemy
         Debug.Log("Player attacked for: " + (playerUnit.Creature.Attack * power)/2);
         enemyHUD.SetData(enemyUnit.Creature);  //update enemy HUD
@@ -182,6 +185,9 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.EnemyMove;
         Debug.Log(state);
         Move move = enemyUnit.Creature.GetRandomMove(); //get random move from enemy move pool
+
+        enemyUnit.PlayAttackAnimation();
+        playerUnit.PlayHitAnimation();
 
         playerUnit.Creature.TakeDamage((enemyUnit.Creature.Attack * move.Base.power) / 2); //damage player
         Debug.Log("Enemy uses: " + move.Base.moveName);
