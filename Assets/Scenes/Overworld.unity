@@ -9600,7 +9600,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5eacc98e46c0ca489befb8a5bd91363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 2
+  input: {x: 0, y: 0}
   playerAnimator: {fileID: 988980344}
 --- !u!212 &988980339
 SpriteRenderer:
