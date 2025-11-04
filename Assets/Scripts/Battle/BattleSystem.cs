@@ -147,6 +147,7 @@ public class BattleSystem : MonoBehaviour
         {
             Debug.Log("Move executed: " + move.Base.moveName);
             StartCoroutine(PlayerMove(move.Base.power));
+            movesPanel.gameObject.SetActive(false);
         }
         else
         {
@@ -206,6 +207,7 @@ public class BattleSystem : MonoBehaviour
             state = BattleState.PlayerAction;
             Debug.Log(state);
             Debug.Log("Player turn!");
+            movesPanel.gameObject.SetActive(true);
         }
     }
 
