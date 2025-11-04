@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Player
+    uniqueID: 3569536227
+    locked: 0
+  - name: Foreground
+    uniqueID: 2611517511
+    locked: 0
   - name: BattleUI
     uniqueID: 2006477929
     locked: 0
