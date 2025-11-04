@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FireLizard
   m_EditorClassIdentifier: 
   creatureName: Fire Lizard
-  frontSprite: {fileID: -3402451715102035049, guid: 8b2db272b98604b4f931dce8bc68d8c7, type: 3}
-  backSprite: {fileID: -6361271296530862326, guid: 8b2db272b98604b4f931dce8bc68d8c7, type: 3}
+  frontSprite: {fileID: -5650910476682140523, guid: 3eff495bb7fe8084b8c473177270a3dc, type: 3}
+  backSprite: {fileID: -2563125536431870033, guid: e2d4fa4c9afeb8746bf1af4f8345e2df, type: 3}
   maxHP: 100
   atk: 2
   def: 3
