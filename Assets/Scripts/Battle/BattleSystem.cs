@@ -172,6 +172,7 @@ public class BattleSystem : MonoBehaviour
         if(enemyUnit.Creature.HP == 0)
         {
             bool playerWon = true;
+            enemyUnit.PlayFaintAnimation();
             Debug.Log("Player wins!");
             EndBattle(playerWon);
         }
@@ -199,6 +200,7 @@ public class BattleSystem : MonoBehaviour
         if (playerUnit.Creature.HP == 0)
         {
             Debug.Log("Player loses!");
+            playerUnit.PlayFaintAnimation();
             bool playerWon = false;
             EndBattle(playerWon);
         }
