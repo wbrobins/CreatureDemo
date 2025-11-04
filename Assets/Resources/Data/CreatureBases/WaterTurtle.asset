@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WaterTurtle
   m_EditorClassIdentifier: 
   creatureName: Water Turtle
-  frontSprite: {fileID: -6140826305895023941, guid: 8b2db272b98604b4f931dce8bc68d8c7, type: 3}
-  backSprite: {fileID: -1052767623090001999, guid: 8b2db272b98604b4f931dce8bc68d8c7, type: 3}
+  frontSprite: {fileID: -934313115971334504, guid: 3df781378bd6a474bb67a4b878680989, type: 3}
+  backSprite: {fileID: 3881468769290707068, guid: c0f4c7a5626a9ad46aa95d2fcfbc7917, type: 3}
   maxHP: 23
   atk: 24
   def: 5
