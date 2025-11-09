@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     [SerializeField] public List<Creature> partyList;
 
     GameState state;
+    public bool canEnterBattle = true;
 
     void Awake()
     {
@@ -36,6 +37,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         state = GameState.FreeRoam;
+        StartCoroutine(OutOfBattleCD());
     }
 
     void Update()
@@ -90,6 +92,7 @@ public class GameController : MonoBehaviour
         //return player to last position after a battle
         if (scene.name == "Overworld" && playerController != null)
         {
+            StartCoroutine(OutOfBattleCD()); //3 second grace period to avoid instant battle triggering upon scene loading
             playerController.transform.position = playerPos;
         }
         else if (scene.name == "Battle" && battleSystem != null)
@@ -97,6 +100,13 @@ public class GameController : MonoBehaviour
             battleSystem.gameObject.SetActive(true);
             battleSystem.StartBattle(pendingLevel, partyList, pendingEnemy);
         }
+    }
+
+    IEnumerator OutOfBattleCD()
+    {
+        canEnterBattle = false;
+        yield return new WaitForSeconds(3);
+        canEnterBattle = true;
     }
 
     public void SaveGame()

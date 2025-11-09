@@ -9,8 +9,15 @@ public class PlayerController : MonoBehaviour
     private Vector2 lastDirection = Vector2.down;
 
     [SerializeField] private Rigidbody2D rb;
-    
+
     [SerializeField] private Animator playerAnimator;
+
+    [SerializeField] GameController gameController;
+
+    void Start()
+    {
+        gameController = GameObject.Find("GameManager").GetComponent<GameController>();
+    }
 
     public void HandleUpdate()
     {
@@ -44,11 +51,10 @@ public class PlayerController : MonoBehaviour
             if(Random.value < encounterChance)
             {
                 var encounter = patch.GetRandomEncounter();
-                if(encounter != null)
+                if(encounter != null && gameController.canEnterBattle)
                 {
                     int level = Random.Range(encounter.minLevel, encounter.maxLevel + 1);
-                    var controller = FindFirstObjectByType<GameController>();
-                    controller.StartBattle(level, encounter.creatureBase);
+                    gameController.StartBattle(level, encounter.creatureBase);
                 }
             }
         }

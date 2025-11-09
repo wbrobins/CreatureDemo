@@ -42,6 +42,7 @@ public class BattleSystem : MonoBehaviour
         playerHUD = GameObject.Find("PlayerUnitHUD").GetComponent<BattleHUD>();
         enemyHUD = GameObject.Find("EnemyUnitHUD").GetComponent<BattleHUD>();
 
+        gameController.dialogueBox.dialogueEmpty.RemoveAllListeners();
         gameController.dialogueBox.dialogueEmpty.AddListener(OnEndOfBattleDialogueEmpty);
 
         //clone party list passed from game controller 
@@ -67,10 +68,17 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetupBattle()
     {
-        playerUnit.Setup(partyList[0]);
-        enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, -1, 0, null));
+        foreach (Creature c in partyList)
+        {
+            if (c.HP > 0)
+            {
+                playerUnit.Setup(c);
+                playerHUD.SetData(playerUnit.Creature);
+                break;
+            }
+        }
 
-        playerHUD.SetData(playerUnit.Creature);
+        enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, -1, 0, null));
         enemyHUD.SetData(enemyUnit.Creature);
 
         state = BattleState.PlayerAction;
@@ -292,7 +300,7 @@ public class BattleSystem : MonoBehaviour
 
     void OnCreatureSwapSelected(Creature c)
     {
-        if (state == BattleState.PlayerAction)
+        if (state == BattleState.PlayerAction && c != playerUnit.Creature)
         {
             state = BattleState.PlayerMove;
             StartCoroutine(SwapCreature(c));
