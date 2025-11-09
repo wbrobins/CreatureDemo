@@ -219,6 +219,8 @@ public class GameController : MonoBehaviour
     {
         state = GameState.Dialog;
 
+        unityEvent.RemoveAllListeners();
+
         var trigger = false;
         Action action = () => trigger = true;
         unityEvent.AddListener(action.Invoke);
@@ -236,7 +238,11 @@ public class GameController : MonoBehaviour
             unityEvent.AddListener(action2.Invoke);
 
             dialogueBox.AddToQueue("System", "Game saved!");
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             SaveGame();
+            sw.Stop();
+            Debug.Log($"SaveGame took {sw.ElapsedMilliseconds} ms");
             dialogueBox.PlayNextInQueue();
 
             yield return new WaitUntil(() => trigger2);

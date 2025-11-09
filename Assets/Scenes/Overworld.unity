@@ -21521,7 +21521,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.1319444
+  orthographic size: 2.5677083
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -22469,11 +22469,12 @@ MonoBehaviour:
   partyList: []
   playerBase: {fileID: 0}
   enemyBase: {fileID: 0}
-  partyHUD: {fileID: 0}
   playerCreatureId: 
   enemyCreatureId: 
   moveButtonPrefab: {fileID: 7990677401038427325, guid: 8aeeb3f72e4284b41ad9d952dd640aef, type: 3}
+  creatureButtonPrefab: {fileID: 8883660473472782874, guid: ef58e535597c4ee45960f82d0cd8c28e, type: 3}
   movesPanel: {fileID: 0}
+  partyPanel: {fileID: 0}
 --- !u!1 &988980337
 GameObject:
   m_ObjectHideFlags: 0

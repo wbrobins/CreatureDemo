@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using UnityEngine;
 
 public enum BattleState { Start, PlayerAction, PlayerMove, EnemyMove, Busy }
@@ -16,13 +15,14 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] public List<Creature> partyList;
     [SerializeField] CreatureBase playerBase;
     [SerializeField] CreatureBase enemyBase;
-    [SerializeField] PartyHUD partyHUD;
 
     [SerializeField] string playerCreatureId;
     [SerializeField] string enemyCreatureId;
 
     [SerializeField] GameObject moveButtonPrefab;
+    [SerializeField] GameObject creatureButtonPrefab;
     [SerializeField] Transform movesPanel;
+    [SerializeField] Transform partyPanel;
 
     private GameController gameController;
     private bool winOrLoss;
@@ -35,12 +35,12 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.Start;
         movesPanel = GameObject.Find("MovesPanel").GetComponent<Transform>();
+        partyPanel = GameObject.Find("PartyPanel").GetComponent<Transform>();
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         playerUnit = GameObject.Find("PlayerUnit").GetComponent<BattleUnit>();
         enemyUnit = GameObject.Find("EnemyUnit").GetComponent<BattleUnit>();
         playerHUD = GameObject.Find("PlayerUnitHUD").GetComponent<BattleHUD>();
         enemyHUD = GameObject.Find("EnemyUnitHUD").GetComponent<BattleHUD>();
-        partyHUD = GameObject.Find("PartyList").GetComponent<PartyHUD>();
 
         gameController.dialogueBox.dialogueEmpty.AddListener(OnEndOfBattleDialogueEmpty);
 
@@ -48,7 +48,11 @@ public class BattleSystem : MonoBehaviour
         partyList = new List<Creature>();
         ClonePartyList(cPartyList);
 
+
+
         playerBase = partyList[0].Base;
+
+        CreateCreatureButtons(partyList);
         CreateMoveButtons(partyList[0].Moves);
 
         enemyBase = cEnemyBase;
@@ -68,8 +72,6 @@ public class BattleSystem : MonoBehaviour
 
         playerHUD.SetData(playerUnit.Creature);
         enemyHUD.SetData(enemyUnit.Creature);
-
-        partyHUD.SetData(gameController.partyList);
 
         state = BattleState.PlayerAction;
         Debug.Log("Battle! Level: " + enemyLevel);
@@ -106,6 +108,22 @@ public class BattleSystem : MonoBehaviour
             MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
             moveButton.SetData(move);
             moveButton.moveSelected.AddListener(OnMoveSelected);
+        }
+    }
+
+    public void CreateCreatureButtons(List<Creature> creatures)
+    {
+        foreach (Transform child in partyPanel)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var creature in creatures)
+        {
+            GameObject buttonObj = Instantiate(creatureButtonPrefab, partyPanel);
+            CreatureButton cButton = buttonObj.GetComponent<CreatureButton>();
+            cButton.SetData(creature);
+            cButton.creatureSelected.AddListener(OnCreatureSwapSelected);
         }
     }
 
@@ -199,10 +217,38 @@ public class BattleSystem : MonoBehaviour
 
         if (playerUnit.Creature.HP == 0)
         {
-            Debug.Log("Player loses!");
             playerUnit.PlayFaintAnimation();
-            bool playerWon = false;
-            EndBattle(playerWon);
+            bool remaining = false;
+            foreach (Creature c in partyList)
+            {
+                if (c.HP > 0)
+                {
+                    playerUnit.Setup(c);
+                    playerHUD.SetData(playerUnit.Creature);  //set HUD data of selected creature
+                    CreateCreatureButtons(partyList);       //reset creature buttons to update data
+                    CreateMoveButtons(c.Moves);
+                    remaining = true;
+                    break;
+                }
+                else
+                {
+                    remaining = false;
+                }
+            }
+            
+            if (!remaining)
+            {
+                Debug.Log("Player loses!");
+                bool playerWon = false;
+                EndBattle(playerWon);
+            }
+            else
+            {
+                state = BattleState.PlayerAction;
+                Debug.Log(state);
+                Debug.Log("Player turn!");
+                movesPanel.gameObject.SetActive(true);
+            }
         }
         else
         {
@@ -238,9 +284,28 @@ public class BattleSystem : MonoBehaviour
 
         dBox.PlayNextInQueue();
     }
-    
+
     void OnEndOfBattleDialogueEmpty()
     {
         OnBattleOver?.Invoke(winOrLoss);
+    }
+
+    void OnCreatureSwapSelected(Creature c)
+    {
+        if (state == BattleState.PlayerAction)
+        {
+            state = BattleState.PlayerMove;
+            StartCoroutine(SwapCreature(c));
+        }
+    }
+    
+    IEnumerator SwapCreature(Creature c)
+    {
+        playerUnit.Setup(c);
+        playerHUD.SetData(playerUnit.Creature);  //set HUD data of selected creature
+        CreateCreatureButtons(partyList);       //reset creature buttons to update data
+        CreateMoveButtons(c.Moves);             //reset move buttons
+        yield return new WaitForSeconds(2);
+        StartCoroutine(EnemyMove());
     }
 }
