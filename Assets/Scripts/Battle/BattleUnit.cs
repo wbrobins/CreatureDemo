@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BattleUnit : MonoBehaviour
 {
     [SerializeField] bool isPlayerUnit;
     [SerializeField] BattleHUD hud;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] List<AudioClip> audioClips;
 
     public Creature Creature { get; private set; }
 
@@ -72,6 +75,8 @@ public class BattleUnit : MonoBehaviour
 
     public void PlayHitAnimation()
     {
+        audioSource.clip = audioClips[0];
+        audioSource.Play();
         StartCoroutine(HitAnimation());
     }
 
@@ -83,6 +88,12 @@ public class BattleUnit : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             spriteRenderer.color = originalColor;
             yield return new WaitForSeconds(0.1f);
+        }
+
+        if(Creature.HP <= Creature.Base.MaxHP / 5 && isPlayerUnit)
+        {
+            audioSource.clip = audioClips[1];
+            audioSource.Play();
         }
     }
 

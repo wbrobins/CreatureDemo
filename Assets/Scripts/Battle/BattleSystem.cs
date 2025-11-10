@@ -25,6 +25,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] Transform movesPanel;
     [SerializeField] Transform partyPanel;
 
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] List<AudioClip> audioClips;
+
     private GameController gameController;
     private bool winOrLoss;
 
@@ -288,6 +291,8 @@ public class BattleSystem : MonoBehaviour
 
         if (playerWon)
         {
+            audioSource.clip = audioClips[0];
+            audioSource.Play();
             int prevLevel = playerUnit.Creature.Level;
             dBox.AddToQueue("System", "You have won!");
             playerUnit.Creature.GetExperience(enemyUnit.Creature.Experience / 7);
@@ -299,6 +304,8 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
+            audioSource.clip = audioClips[1];
+            audioSource.Play();
             dBox.AddToQueue("System", "You have lost...");
             dBox.AddToQueue("System", "Loading from last save...");
         }
