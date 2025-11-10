@@ -21521,7 +21521,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.6145833
+  orthographic size: 2.3125
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -22460,10 +22460,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 657459812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 338.43506, y: -142.84598}
-  m_SizeDelta: {x: -676.8702, y: -285.692}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -109.56494, y: 109.15}
+  m_SizeDelta: {x: 219.12982, y: 218.30801}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &814372003
 MonoBehaviour:
