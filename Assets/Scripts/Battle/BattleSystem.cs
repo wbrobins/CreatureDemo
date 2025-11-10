@@ -226,6 +226,7 @@ public class BattleSystem : MonoBehaviour
         if (playerUnit.Creature.HP == 0)
         {
             playerUnit.PlayFaintAnimation();
+            yield return new WaitForSeconds(2);
             bool remaining = false;
             foreach (Creature c in partyList)
             {
