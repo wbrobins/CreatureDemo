@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum BattleState { Start, PlayerAction, PlayerMove, EnemyMove, Busy }
 
@@ -107,7 +108,10 @@ public class BattleSystem : MonoBehaviour
     {
         foreach (Transform child in movesPanel)
         {
-            Destroy(child.gameObject);
+            if(child.GetComponent<Button>() != null) //only clear buttons, not the label
+            {
+               Destroy(child.gameObject); 
+            }
         }
 
         foreach (var move in moves)
@@ -123,7 +127,10 @@ public class BattleSystem : MonoBehaviour
     {
         foreach (Transform child in partyPanel)
         {
-            Destroy(child.gameObject);
+            if(child.GetComponent<Button>() != null)  //only clear buttons, not the label
+            {
+               Destroy(child.gameObject); 
+            }
         }
 
         foreach (var creature in creatures)
@@ -174,6 +181,7 @@ public class BattleSystem : MonoBehaviour
             Debug.Log("Move executed: " + move.Base.moveName);
             StartCoroutine(PlayerMove(move.Base.power));
             movesPanel.gameObject.SetActive(false);
+            partyPanel.gameObject.SetActive(false);
         }
         else
         {
@@ -220,6 +228,7 @@ public class BattleSystem : MonoBehaviour
         playerUnit.Creature.TakeDamage((enemyUnit.Creature.Attack * move.Base.power) / 2); //damage player
         Debug.Log("Enemy uses: " + move.Base.moveName);
         playerHUD.SetData(playerUnit.Creature);   //update player HUD
+        CreateCreatureButtons(partyList); //update creature info in party list
 
         yield return new WaitForSeconds(2);
 
@@ -257,6 +266,7 @@ public class BattleSystem : MonoBehaviour
                 Debug.Log(state);
                 Debug.Log("Player turn!");
                 movesPanel.gameObject.SetActive(true);
+                partyPanel.gameObject.SetActive(true);
             }
         }
         else
@@ -265,6 +275,7 @@ public class BattleSystem : MonoBehaviour
             Debug.Log(state);
             Debug.Log("Player turn!");
             movesPanel.gameObject.SetActive(true);
+            partyPanel.gameObject.SetActive(true);
         }
     }
 
@@ -314,6 +325,8 @@ public class BattleSystem : MonoBehaviour
         playerHUD.SetData(playerUnit.Creature);  //set HUD data of selected creature
         CreateCreatureButtons(partyList);       //reset creature buttons to update data
         CreateMoveButtons(c.Moves);             //reset move buttons
+        movesPanel.gameObject.SetActive(false);
+        partyPanel.gameObject.SetActive(false);
         yield return new WaitForSeconds(2);
         StartCoroutine(EnemyMove());
     }
