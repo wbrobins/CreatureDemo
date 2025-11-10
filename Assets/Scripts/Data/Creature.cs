@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -35,7 +36,7 @@ public class Creature
 
         if(pExperience == 0)
         {
-            experience = (level * level * level);
+            experience = level * level * level;
         }
         else
         {
@@ -55,7 +56,7 @@ public class Creature
         {
             moves = learnedMoves;
         }
-        else
+        else if (learnedMoves == null || !learnedMoves.Any())
         {
             moves = new List<Move>();
             foreach (var moveBase in Base.LearnableMoves)

@@ -300,6 +300,7 @@ public class BattleSystem : MonoBehaviour
         else
         {
             dBox.AddToQueue("System", "You have lost...");
+            dBox.AddToQueue("System", "Loading from last save...");
         }
 
         dBox.PlayNextInQueue();

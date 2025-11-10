@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -16,9 +17,12 @@ public class GameController : MonoBehaviour
     [SerializeField] PlayerController playerController;
     [SerializeField] Vector3 playerPos;
     [SerializeField] public List<Creature> partyList;
+    [SerializeField] Transform partyPanel;
+    [SerializeField] GameObject creaturePanelPrefab;
 
     GameState state;
     public bool canEnterBattle = true;
+    bool hasLoadedGame = false;
 
     void Awake()
     {
@@ -29,7 +33,6 @@ public class GameController : MonoBehaviour
         }
 
         Instance = this;
-        LoadGame();
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -67,16 +70,35 @@ public class GameController : MonoBehaviour
 
     void EndBattle(bool won)
     {
-        //if battle is won, save the updated creature data here
-        if(won == true)
-        {
-            SavePartyFromWonBattle();
-        }
-
-        SceneManager.LoadScene("Overworld");
         state = GameState.FreeRoam;
         battleSystem.gameObject.SetActive(false);
-        playerController = FindFirstObjectByType<PlayerController>();
+
+        //if battle is won, save the updated creature data here
+        if (won == true)
+        {
+            SavePartyFromWonBattle();
+            SceneManager.LoadScene("Overworld");
+        }
+        else
+        {
+            hasLoadedGame = false;
+            SceneManager.LoadScene("Overworld");
+        }
+    }
+
+    void CreateCreaturePanels(List<Creature> creatures)
+    {
+        foreach (Transform child in partyPanel)
+        {
+            Destroy(child);
+        }
+
+        foreach(var c in creatures)
+        {
+            GameObject panelObj = Instantiate(creaturePanelPrefab, partyPanel);
+            CreatureOverworldPanel cOverworldPanel = panelObj.GetComponent<CreatureOverworldPanel>();
+            cOverworldPanel.SetData(c);
+        }
     }
 
     int pendingLevel;
@@ -87,16 +109,27 @@ public class GameController : MonoBehaviour
         //reassign player controller to game controller
         playerController = FindFirstObjectByType<PlayerController>();
 
-        battleSystem.OnBattleOver += EndBattle;
+        partyPanel = GameObject.Find("PartyPanel").GetComponent<Transform>();
 
         //return player to last position after a battle
         if (scene.name == "Overworld" && playerController != null)
         {
-            StartCoroutine(OutOfBattleCD()); //3 second grace period to avoid instant battle triggering upon scene loading
-            playerController.transform.position = playerPos;
+            if (!hasLoadedGame)
+            {
+                LoadGame();
+                hasLoadedGame = true;
+            }
+            else
+            {
+                playerController.transform.position = playerPos;
+            }
+
+            StartCoroutine(OutOfBattleCD());
+            CreateCreaturePanels(partyList); //3 second grace period to avoid instant battle triggering upon scene loading
         }
         else if (scene.name == "Battle" && battleSystem != null)
         {
+            battleSystem.OnBattleOver += EndBattle;
             battleSystem.gameObject.SetActive(true);
             battleSystem.StartBattle(pendingLevel, partyList, pendingEnemy);
         }
@@ -113,6 +146,7 @@ public class GameController : MonoBehaviour
     {
         PlayerData data = new PlayerData();
         data.playerName = "Morgan";
+        data.playerPos = playerController.transform.position;
         data.partyList = new List<CreatureData>();
 
         foreach (var creature in partyList)
@@ -154,15 +188,21 @@ public class GameController : MonoBehaviour
         string json = File.ReadAllText(path);
         PlayerData loadedData = JsonUtility.FromJson<PlayerData>(json);
 
+        playerController.transform.position = loadedData.playerPos;
+
         partyList.Clear();
 
         foreach (var c in loadedData.partyList)
         {
             //rebuild the move list for creature
             List<Move> moves = new List<Move>();
+            Debug.Log(c.Moves);
 
-            if (c.Moves != null)
+            Creature creature;
+
+            if (c.Moves != null && c.Moves.Any())
             {
+                Debug.Log("Move lsit has moves");
                 foreach (var m in c.Moves)
                 {
                     //load the MoveBase asset by name
@@ -179,10 +219,13 @@ public class GameController : MonoBehaviour
                     move.SetPP(m.CurrentPP);
                     moves.Add(move);
                 }
+                creature = new Creature(c.CreatureId, c.Level, c.HP, c.Experience, moves);
             }
-
-            //rebuild the Creature
-            Creature creature = new Creature(c.CreatureId, c.Level, c.HP, c.Experience, moves);
+            else
+            { //defaults
+                Debug.Log("Null");
+                creature = new Creature(c.CreatureId, c.Level, c.HP, c.Experience);
+            }
 
             //add to player's party
             partyList.Add(creature);

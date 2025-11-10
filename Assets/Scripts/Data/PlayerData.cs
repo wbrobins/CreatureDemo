@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 [Serializable]
@@ -23,6 +24,8 @@ public class CreatureData
 public class PlayerData
 {
     public string playerName;
+
+    public Vector3 playerPos;
 
     public List<CreatureData> partyList;
 }
