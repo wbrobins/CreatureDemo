@@ -22684,6 +22684,10 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: ff3d839a8c166ad4d9355a979452cee8, type: 3}
   - {fileID: 8300000, guid: 6096c9419de05124fa14bd2a997ac20e, type: 3}
+  struggleMoves:
+  - moveBase: {fileID: 11400000, guid: bfa61658351b5a245b5bf1995ebccc92, type: 2}
+    move_id: Struggle
+    pp: 999
 --- !u!82 &913004211
 AudioSource:
   m_ObjectHideFlags: 0

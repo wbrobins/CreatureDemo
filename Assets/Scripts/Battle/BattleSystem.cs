@@ -28,6 +28,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] List<AudioClip> audioClips;
 
+    [SerializeField] List<Move> struggleMoves;
+
     private GameController gameController;
     private bool winOrLoss;
 
@@ -84,6 +86,8 @@ public class BattleSystem : MonoBehaviour
 
         enemyUnit.Setup(new Creature(enemyCreatureId, enemyLevel, -1, 0, null));
         enemyHUD.SetData(enemyUnit.Creature);
+
+        CheckForUsableMoves();
 
         state = BattleState.PlayerAction;
         Debug.Log("Battle! Level: " + enemyLevel);
@@ -256,7 +260,7 @@ public class BattleSystem : MonoBehaviour
                     remaining = false;
                 }
             }
-            
+
             if (!remaining)
             {
                 Debug.Log("Player loses!");
@@ -280,6 +284,8 @@ public class BattleSystem : MonoBehaviour
             movesPanel.gameObject.SetActive(true);
             partyPanel.gameObject.SetActive(true);
         }
+
+        CheckForUsableMoves();
     }
 
     void EndBattle(bool playerWon)
@@ -326,7 +332,7 @@ public class BattleSystem : MonoBehaviour
             StartCoroutine(SwapCreature(c));
         }
     }
-    
+
     IEnumerator SwapCreature(Creature c)
     {
         playerUnit.Setup(c);
@@ -337,5 +343,24 @@ public class BattleSystem : MonoBehaviour
         partyPanel.gameObject.SetActive(false);
         yield return new WaitForSeconds(2);
         StartCoroutine(EnemyMove());
+    }
+    
+    void CheckForUsableMoves()
+    {
+        bool hasUsableMoves = false;
+
+        foreach (Move m in playerUnit.Creature.Moves)
+        {
+            if (m.HasPPLeft)
+            {
+                hasUsableMoves = true;
+                break;
+            }
+        }
+
+        if (!hasUsableMoves)
+        {
+            CreateMoveButtons(struggleMoves);
+        }
     }
 }
