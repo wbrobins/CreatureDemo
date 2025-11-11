@@ -51,9 +51,16 @@ public class GameController : MonoBehaviour
         else if (state == GameState.Battle && battleSystem != null)
             battleSystem.HandleUpdate();
         
-        if (state == GameState.FreeRoam && Input.GetKeyDown(KeyCode.F))
+        if (state == GameState.FreeRoam)
         {
-            StartCoroutine(SaveRoutine(dialogueBox.dialogueEmpty));
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                StartCoroutine(SaveRoutine(dialogueBox.dialogueEmpty));
+            }
+            else if (Input.GetKeyDown(KeyCode.H))
+            {
+                HealParty();
+            }
         }
     }
 
@@ -90,7 +97,7 @@ public class GameController : MonoBehaviour
     {
         foreach (Transform child in partyPanel)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
 
         foreach(var c in creatures)
@@ -267,10 +274,11 @@ public class GameController : MonoBehaviour
             partyList.Add(creature);
         }
     }
-    
+
     IEnumerator SaveRoutine(UnityEvent unityEvent)
     {
         state = GameState.Dialog;
+        partyPanel.gameObject.SetActive(false);
 
         unityEvent.RemoveAllListeners();
 
@@ -303,7 +311,20 @@ public class GameController : MonoBehaviour
             unityEvent.RemoveListener(action2.Invoke);
         }
 
+        partyPanel.gameObject.SetActive(true);
+
         unityEvent.RemoveListener(action.Invoke);
         state = GameState.FreeRoam;
+    }
+    
+
+    void HealParty()
+    {
+        foreach (Creature c in partyList)
+        {
+            c.ResetHP();
+        }
+
+        CreateCreaturePanels(partyList);
     }
 }

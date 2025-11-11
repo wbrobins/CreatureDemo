@@ -20,5 +20,8 @@ MonoBehaviour:
   def: 3
   spd: 1
   learnableMoves:
-  - {fileID: 11400000, guid: 1e6df50b927b94c418475b8a3157b7d8, type: 2}
+  - moveBase: {fileID: 11400000, guid: 1e6df50b927b94c418475b8a3157b7d8, type: 2}
+    level: 2
+  - moveBase: {fileID: 11400000, guid: a2ce10142fe85b64e8327eb3f413ef12, type: 2}
+    level: 6
   battlePrefab: {fileID: 2831885145790271382, guid: f74a95208378aa242b2b38fa6a5dbd2d, type: 3}

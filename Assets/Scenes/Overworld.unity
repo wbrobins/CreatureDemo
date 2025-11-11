@@ -21521,7 +21521,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.3125
+  orthographic size: 1.8819444
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -23231,16 +23231,16 @@ MonoBehaviour:
   playerController: {fileID: 988980338}
   playerPos: {x: 0, y: 0, z: 0}
   partyList:
-  - creatureBase: {fileID: 11400000, guid: e527e2b2323e3aa46aa4b82098d43cbf, type: 2}
-    creature_id: WaterTurtle
-    level: 2
+  - creatureBase: {fileID: 11400000, guid: 63d4cd719b5690d4e98a613839fdbab3, type: 2}
+    creature_id: FireLizard
+    level: 3
     hp: -1
     maxHP: 0
     experience: 0
     moves: []
-  - creatureBase: {fileID: 11400000, guid: 63d4cd719b5690d4e98a613839fdbab3, type: 2}
-    creature_id: FireLizard
-    level: 2
+  - creatureBase: {fileID: 11400000, guid: e527e2b2323e3aa46aa4b82098d43cbf, type: 2}
+    creature_id: WaterTurtle
+    level: 3
     hp: -1
     maxHP: 0
     experience: 0

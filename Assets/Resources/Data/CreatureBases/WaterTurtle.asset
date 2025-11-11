@@ -15,10 +15,13 @@ MonoBehaviour:
   creatureName: Water Turtle
   frontSprite: {fileID: -934313115971334504, guid: 3df781378bd6a474bb67a4b878680989, type: 3}
   backSprite: {fileID: 3881468769290707068, guid: c0f4c7a5626a9ad46aa95d2fcfbc7917, type: 3}
-  maxHP: 23
+  maxHP: 50
   atk: 24
   def: 5
   spd: 24
   learnableMoves:
-  - {fileID: 11400000, guid: 666cfee567a78734f99c31a278bdf03c, type: 2}
+  - moveBase: {fileID: 11400000, guid: 666cfee567a78734f99c31a278bdf03c, type: 2}
+    level: 2
+  - moveBase: {fileID: 11400000, guid: 944d238f4779f064cad2fa994f937928, type: 2}
+    level: 5
   battlePrefab: {fileID: 0}

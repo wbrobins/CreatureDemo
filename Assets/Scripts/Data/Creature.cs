@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 
 [System.Serializable]
@@ -61,7 +62,7 @@ public class Creature
             moves = new List<Move>();
             foreach (var moveBase in Base.LearnableMoves)
             {
-                moves.Add(new Move(moveBase.name));
+                moves.Add(new Move(moveBase.moveBase.name));
                 if (moves.Count >= 4) break;
             }
         }
@@ -95,9 +96,17 @@ public class Creature
     {
         experience += pExperience;
         Debug.Log("Gained " + pExperience + " exp!");
-        while(experience > (level*level*level))
+        while (experience >= (level * level * level))
         {
             level += 1;
+        }
+        
+        foreach(LearnableMove m in creatureBase.LearnableMoves)
+        {
+            if(level >= m.level && !moves.Exists(x => x.MoveId == m.moveBase.name))
+            {
+                moves.Add(new Move(m.moveBase.name));
+            }
         }
     }
 
