@@ -106,13 +106,13 @@ public class BattleSystem : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space)) //simulate win
             {
-                bool playerWon = true;
-                OnBattleOver?.Invoke(playerWon);
+                //bool playerWon = true;
+                //OnBattleOver?.Invoke(playerWon);
             } else if (Input.GetKeyDown(KeyCode.L)) //simulate loss
             {
-                bool playerWon = false;
-                Debug.Log(playerWon);
-                OnBattleOver?.Invoke(playerWon);
+                //bool playerWon = false;
+                //Debug.Log(playerWon);
+                //OnBattleOver?.Invoke(playerWon);
             }
         }
         

@@ -29,7 +29,9 @@ Included systems: Turn-based combat system, HUD and dialogue UI, save/load syste
 - *Resources/* - Contains the ScriptableObject bases for Creatures, Moves, and EncounterTables.
 
 ## How to Play
-//insert instructions here - TBD
+[Click here to play on UnityPlay](https://play.unity.com/en/games/9e84292d-784d-4f75-b84e-dd0dbc1a66b9/2d-creature-battle-prototype)
+
+NOTE: As of 11/18/2025 seams might appear in the tileset when played in the windowed mode. It is recommended to play in fullscreen until this can be fixed.
 
 ### Controls:
 Overword:

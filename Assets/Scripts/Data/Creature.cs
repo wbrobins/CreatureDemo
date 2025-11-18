@@ -62,7 +62,10 @@ public class Creature
             moves = new List<Move>();
             foreach (var moveBase in Base.LearnableMoves)
             {
-                moves.Add(new Move(moveBase.moveBase.name));
+                if(level >= moveBase.level)
+                {
+                    moves.Add(new Move(moveBase.moveBase.name));
+                }
                 if (moves.Count >= 4) break;
             }
         }

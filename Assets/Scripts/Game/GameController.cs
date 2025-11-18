@@ -191,6 +191,17 @@ public class GameController : MonoBehaviour
         if (!File.Exists(path))
         {
             Debug.Log("Save file not found in " + path);
+
+            List<Creature> newList = new List<Creature>();
+
+            foreach (Creature c in partyList)
+            {
+                Creature creature = new Creature(c.CreatureId, c.Level, c.HP, c.Experience);
+                newList.Add(creature);
+                Debug.Log("Removing " + c.CreatureId);
+            }
+
+            partyList = newList;
             return;
         }
 
