@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Multiplayer.Center.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,6 +37,11 @@ public class BattleSystem : MonoBehaviour
     public event Action<bool> OnBattleOver;
 
     BattleState state;
+
+    private void OnDisable()
+    {
+        OnBattleOver -= EndBattle;
+    }
 
     public void StartBattle(int level, List<Creature> cPartyList, CreatureBase cEnemyBase)
     {
@@ -105,6 +111,7 @@ public class BattleSystem : MonoBehaviour
             } else if (Input.GetKeyDown(KeyCode.L)) //simulate loss
             {
                 bool playerWon = false;
+                Debug.Log(playerWon);
                 OnBattleOver?.Invoke(playerWon);
             }
         }

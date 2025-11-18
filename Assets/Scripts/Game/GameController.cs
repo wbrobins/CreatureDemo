@@ -77,6 +77,7 @@ public class GameController : MonoBehaviour
 
     void EndBattle(bool won)
     {
+        Debug.Log(won);
         state = GameState.FreeRoam;
         battleSystem.gameObject.SetActive(false);
 
@@ -136,6 +137,7 @@ public class GameController : MonoBehaviour
         }
         else if (scene.name == "Battle" && battleSystem != null)
         {
+            battleSystem.OnBattleOver -= EndBattle; 
             battleSystem.OnBattleOver += EndBattle;
             battleSystem.gameObject.SetActive(true);
             battleSystem.StartBattle(pendingLevel, partyList, pendingEnemy);
